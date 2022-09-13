@@ -4,19 +4,20 @@
 <%@ include file="../layout/header.jsp"%>
 
 <div class="container">
-	<form method="post" action="/login">
+	<form method="#" action="#">
 		<div class="mb-3 mt-3">
 			<input
 				type="text" class="form-control"
-				placeholder="Enter username" name="username">
+				placeholder="Enter password" name="password">
 		</div>
 		<div class="mb-3">
 			<input
 				type="password" class="form-control" 
-				placeholder="Enter password" name="password">
+				placeholder="Enter email" name="email">
 		</div>
-		<button type="submit" class="btn btn-primary">로그인</button>
+		<button type="submit" class="btn btn-primary">수정</button>
 	</form>
+	<button type="submit" class="btn btn-primary">회원탈퇴</button>
 </div>
 
 <%@ include file="../layout/footer.jsp"%>
