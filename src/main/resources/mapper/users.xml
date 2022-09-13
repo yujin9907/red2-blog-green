@@ -5,12 +5,28 @@
 <mapper namespace="site.metacoding.red.domain.users.UsersDao">
 	
 	<insert id="insert">
-		INSERT INTO users(id, username, password, email, createdAt) 
-		VALUES(users_seq.nextval, #{username}, #{password}, #{email}, sysdate)
+		INSERT INTO users(username, password, email, createdAt) 
+		VALUES(#{username}, #{password}, #{email}, now())
 	</insert>
 
 	<select id="findById" resultType="site.metacoding.red.domain.users.Users">
 		SELECT * FROM users WHERE id = #{id}
 	</select>
-
+	
+	<select id="findAll" resultType="site.metacoding.red.domain.users.Users">
+		SELECT * FROM users
+	</select>
+	
+	<delete id="deleteById">
+		DELETE FROM users WHERE id=#{id}
+	</delete>
+	
+	<select id="findByUsername" resultType="site.metacoding.red.domain.users.Users">
+		SELECT * FROM users WHERE username=#{username}
+	</select>
+	
+	<update id ="update">
+		update users set password=#{password}, email=#{email} where id=#{id}
+	</update>
+	
 </mapper>
