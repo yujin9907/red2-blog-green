@@ -4,77 +4,75 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.red.domain.boards.Boards;
 import site.metacoding.red.domain.boards.BoardsDao;
 import site.metacoding.red.domain.users.Users;
-import site.metacoding.red.web.dto.response.boards.MainDto;
-import site.metacoding.red.web.dto.response.boards.PagingDto;
-import site.metacoding.red.web.request.boards.InsertDto;
+import site.metacoding.red.web.request.boards.WriteDto;
 import site.metacoding.red.web.request.boards.UpdateDto;
 import site.metacoding.red.web.response.boards.PagingDto;
+import site.metacoding.red.web.response.boards.MainDto;
 
 @RequiredArgsConstructor
 @Service
 public class BoardsService {
-	
+
 	private final BoardsDao boardsDao;
 	private final HttpSession session;
-	
-	public void 게시글목록보기(Integer page, String keyword) {
-		if(page==null) {
-			page=0;
+
+	public PagingDto 게시글목록보기(Integer page, String keyword) {
+
+		if (page == null) {
+			page = 0;
 		}
 		int startNum = page * 3;
-		
+
 		if (keyword == null || keyword.isEmpty()) {
+
+			List<MainDto> boardsList = boardsDao.findAll(startNum);
+			PagingDto paging = boardsDao.paging(page, null);
+
+			paging.dopaging();
+			paging.setMainDto(boardsList);
 			
-			List<Boards> boardsList = boardsDao.findAll();
+			System.out.println(paging.isFirst());
+			System.out.println(paging.getStartPageNum());
 
-			PagingDto paging = boardsDao.paging();
-			
-			Integer currentPage = paging.getCurrentPage();
-			Integer totalPage = paging.getTotalPage();
-			Integer count = 5;
-			Integer start = ((currentPage / count) * count) + 1;
-			Integer block = (currentPage / count) + 1;
-			Integer last = ((currentPage / count) + 1) * count;
+			return paging;
 
-			if (paging.getTotalPage() < last) {
-				last = paging.getTotalPage();
-			}
+		} else {
 
-			paging.setKeyword(keyword);
-			paging.setStartPageNum(start);
-			paging.setLastPageNum(last);
-			paging.setBlockPage(block);
-			paging.setBlockPageCount(count);
+			List<MainDto> boardsList = boardsDao.findSearch(startNum, keyword);
+			PagingDto paging = boardsDao.paging(page, keyword);
 
-			model.addAttribute("paging", paging);
-			model.addAttribute("boardsList", boardsList);
+			paging.dopaging();
+			paging.setMainDto(boardsList);
 
-
-
+			return paging;
 		}
-		
-		
+
 	}
+
 	public Boards 게시글상세보기(Integer id) {
 		Boards boardsPS = boardsDao.findById(id);
 		return boardsPS;
 	}
+
 	public void 게시글수정하기(Integer id, UpdateDto updateDto) {
 		Boards boardsPS = boardsDao.findById(id);
 		boardsPS.update(updateDto);
 		boardsDao.update(boardsPS);
 	}
+
 	public void 게시글삭제하기(Integer id) {
 		boardsDao.deleteById(id);
 	}
-	public void 게시글쓰기(InsertDto insertDto) {
+
+	public void 게시글쓰기(WriteDto writeDto, Users principal) {
 		Users principalUser = (Users) session.getAttribute("principal");
-		boardsDao.insert(insertDto, principalUser.getId());
+		boardsDao.insert(writeDto, principalUser.getId());
 	}
 }

@@ -10,4 +10,63 @@
 	<update id="updateToUsersId">
 		UPDATE boards SET usersId=null WHERE usersId=#{id}
 	</update>
+	
+	<select id="findById"
+		resultType="site.metacoding.red.domain.boards.Boards">
+		SELECT * FROM boards WHERE id=#{id}
+	</select>
+	
+	<select id="findSearch"
+		resultType="site.metacoding.red.web.response.boards.MainDto">
+		SELECT b.id, b.title, u.username
+		FROM boards b
+		INNER JOIN
+		users u
+		ON b.usersId = u.id
+		WHERE title like '%'||#{keyword}||'%'
+		ORDER BY b.id DESC
+		limit 3 offset  #{startNum}
+	</select>
+
+	<select id="findAll"
+		resultType="site.metacoding.red.web.response.boards.MainDto">
+		SELECT b.id, b.title, u.username
+		FROM boards b
+		INNER JOIN
+		users u
+		ON b.usersId = u.id
+		ORDER BY b.id DESC
+		limit 3 offset #{startNum}
+	</select>
+
+	<select id="paging"
+		resultType="site.metacoding.red.web.response.boards.PagingDto">
+		SELECT totalCount,
+		totalPage,
+		currentPage,
+		case when currentPage=0 then 1 else 0 end as isFirst,
+		case when currentPage=totalPage-1 then 1 else 0 end as isLast
+		FROM
+		(
+		select count(*) totalCount, ceil(count(*)/3) totalPage, #{page} currentPage, 0
+		isFirst, 0 isLast
+		FROM boards
+		<if test="keyword!=null">
+		WHERE title like '%'||#{keyword}||'%'
+		</if>
+		) b
+	</select>
+	<update id="update">
+		UPDATE boards SET title = #{title}, content =#{content} WHERE id=#{id}
+	</update>
+
+	<delete id="delete">
+		DELECT FROM boards WHERE id=#{id}
+	</delete>
+	
+	<insert id="insert">
+		INSERT INTO boards(id, title, content, usersId, createdAt) 
+		VALUES(boards_seq.nextval, #{title}, #{content}, #{usersId}, now())
+	</insert>
+
 </mapper>

@@ -1,5 +1,7 @@
 package site.metacoding.red.web.response.boards;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,13 +23,25 @@ public class PagingDto {
 	
 	private String keyword;
 	
-	public PagingDto(Integer totalCount, Integer totalPage, Integer currentPage,boolean isFirst, boolean isLast) {
-		this.totalCount=totalCount;
-		this.totalPage=totalPage;
-		this.currentPage=currentPage;
-		this.isFirst=isFirst;
-		this.isLast=isLast;
-	}
+	private List<MainDto> mainDto;
 	
+//  이거 왜 만듦?
+//	public PagingDto(Integer totalCount, Integer totalPage, Integer currentPage,boolean isFirst, boolean isLast) {
+//		this.totalCount=totalCount;
+//		this.totalPage=totalPage;
+//		this.currentPage=currentPage;
+//		this.isFirst=isFirst;
+//		this.isLast=isLast;
+//	}
+	public void dopaging() {
+		blockPageCount = 5;
+		startPageNum = ((currentPage / blockPageCount) * blockPageCount) + 1;
+		blockPage = (currentPage / blockPageCount) + 1;
+		lastPageNum = ((currentPage / blockPageCount) + 1) * blockPageCount;
+		
+		if (totalPage < lastPageNum) {
+			lastPageNum = totalPage;
+		}
+	}
 	
 }
