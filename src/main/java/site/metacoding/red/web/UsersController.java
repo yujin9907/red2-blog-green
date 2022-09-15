@@ -57,32 +57,36 @@ public class UsersController {
 	
 	// 메시지 뿌리면서 가는 법
 	@PostMapping("/login")
-	public @ResponseBody String login(LoginDto loginDto) { // 자바스크립트 사용을 위해, 뷰리졸버 발동 안 함, 데이터를 리턴하는 메서드가 됨
+	public @ResponseBody CMRespDto<?> login(@RequestBody LoginDto loginDto) { // 자바스크립트 사용을 위해, 뷰리졸버 발동 안 함, 데이터를 리턴하는 메서드가 됨
 		Users principal = usersService.로그인(loginDto);
+		System.out.println(loginDto);
 		if(principal == null) {
-			return Script.back("아이디 혹은 비밀번호가 틀렸습니다.");
+			return new CMRespDto<>(-1, "로그인실패", null);
 		} // 안 된 경우를 처리하고 정상 경우는 밑에 두는 게 코드가 깔끔함
 		session.setAttribute("principal", principal);
-		return Script.href("/");  
+		return new CMRespDto<>(1, "성공", null); 
 	}
 	
-	@GetMapping("/uesrs/{id}")
+	@GetMapping("/users/{id}")
 	public String updateForm(@PathVariable Integer id, Model model) {
 		Users usersPS = usersService.회원정보보기(id); // db에서 가져온건 ps 붙임
 		model.addAttribute("usres", usersPS);
 		return "users/updateForm"; // 이런 거 만드는 거 숙제임
 	}
 	
-	@PutMapping("/uesrs/{id}")
-	public String update(@PathVariable Integer id, UpdateDto updateDto) {
-		usersService.회원수정(id, updateDto);
-		return "redirect:/users/"+id;
+	// rest api 주소 설계 규칙에 맞게. 사실 /uesrs 로 해도 되지만(세션에 아이디 값이 있기 때문에) 규칙을 지켜서 맞춰줌. users테이블에 (where)id을 수정하겠다
+	@PutMapping("/users/{id}")
+	public @ResponseBody CMRespDto<?> update(@PathVariable Integer id, @RequestBody UpdateDto updateDto) {
+		Users usersPS = usersService.회원수정(id, updateDto);
+		session.setAttribute("users", usersPS);
+		return new CMRespDto<>(1, "회원 수정 성공", null);
 	}
 	
 	@DeleteMapping("/users/{id}")
-	public @ResponseBody String delete(@PathVariable Integer id) {
+	public @ResponseBody CMRespDto<?> delete(@PathVariable Integer id) {
 		usersService.회원탈퇴(id);
-		return Script.href("/loginForm", "회원탈퇴 완료");
+		session.invalidate();
+		return new CMRespDto<>(1, "회원탈퇴성공", null);
 	}
 	
 	@GetMapping("/logout")

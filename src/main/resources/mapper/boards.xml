@@ -65,8 +65,8 @@
 	</delete>
 	
 	<insert id="insert">
-		INSERT INTO boards(id, title, content, usersId, createdAt) 
-		VALUES(boards_seq.nextval, #{title}, #{content}, #{usersId}, now())
+		INSERT INTO boards(title, content, usersId, createdAt) 
+		VALUES(#{title}, #{content}, #{usersId}, now())
 	</insert>
 
 </mapper>

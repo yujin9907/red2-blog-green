@@ -10,7 +10,7 @@ import site.metacoding.red.web.response.boards.PagingDto;
 
 //3. 다오 생성 : 인터페이스
 public interface BoardsDao {
-	public void insert(WriteDto insertDto, Integer id); // 1. crud 작성순서 전부 보이드에 매개변수 없이 일단 작성, 인서트 먼저, 인서트보단 세이브를 많이 쓰긴 함
+	public void insert(WriteDto writeDto, Integer usersid); // 1. crud 작성순서 전부 보이드에 매개변수 없이 일단 작성, 인서트 먼저, 인서트보단 세이브를 많이 쓰긴 함
 	public List<MainDto> findAll(int startNum); // 2. 조회 두가지
 	public Boards findById(Integer id);
 	public void update(Boards boards); // 3. ud

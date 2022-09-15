@@ -27,6 +27,9 @@ public class UsersService {
 	}
 	public Users 로그인(LoginDto loginDto) { 
 		Users usersPS = usersDao.findByUsername(loginDto.getUsername());
+		if(usersPS==null) {
+			return null;
+		}
 		
 		// if로 uesrsPS의 패스워드와 디티오 패스워드 비교, 직접 디비에 비교하지마
 		if(usersPS.getPassword()==loginDto.getPassword()) {
@@ -34,7 +37,7 @@ public class UsersService {
 		}
 		return usersPS; 
 	} 
-	public void 회원수정(Integer id, UpdateDto updateDto) {
+	public Users 회원수정(Integer id, UpdateDto updateDto) {
 		//1. 영속화
 		Users usersPS = usersDao.findById(id);
 		//2. 영속화된 객체 변경
@@ -42,6 +45,8 @@ public class UsersService {
 		usersPS.setEmail(updateDto.getEmail());
 //		//3. 디비수정
 		usersDao.update(usersPS);
+		
+		return usersPS;
 	}
 	
 	
