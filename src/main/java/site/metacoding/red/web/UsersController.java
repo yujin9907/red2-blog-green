@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import site.metacoding.red.util.Script;
 import site.metacoding.red.web.request.users.JoinDto;
 import site.metacoding.red.web.request.users.LoginDto;
 import site.metacoding.red.web.request.users.UpdateDto;
+import site.metacoding.red.web.response.CMRespDto;
 
 @RequiredArgsConstructor
 @Controller
@@ -27,6 +29,14 @@ public class UsersController {
 
 	private final UsersService usersService;
 	private final HttpSession session;
+	
+	// localhost:8000/users/usernameSameCheck?username=ssar
+	@GetMapping("/users/usernameSameCheck")
+	public @ResponseBody CMRespDto<Boolean> usernameSameCheck(String username) {
+		boolean isSame = usersService.아이디중복확인(username);
+		// 리턴타입은 통일해야 됨 -> DTO 리스펀스 만들기
+		return new CMRespDto<>(1, "성공", isSame);
+	}
 	
 	@GetMapping("/joinForm") // 인증과 관려된 애들은 도메인명을 붙이지 않음
 	// 나중에 인증이 필요한 애들만 users를 붙이는 등 해서 xml을 통해 인증 주소세팅을 할 수 있음
@@ -40,9 +50,9 @@ public class UsersController {
 	
 	// 회원 가입 하기
 	@PostMapping("/join")
-	public String join(JoinDto joinDto) {
+	public @ResponseBody CMRespDto<?> join(@RequestBody JoinDto joinDto) { // json 데이터라서
 		usersService.회원가입(joinDto);
-		return "redirect:/loginForm"; // 매핑 주소를 리다렉션 시킴 
+		return new CMRespDto<>(1, "회원가입성공", null); // 매핑 주소를 리다렉션 시킴 
 	}
 	
 	// 메시지 뿌리면서 가는 법
