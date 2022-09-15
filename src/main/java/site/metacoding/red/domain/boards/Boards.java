@@ -18,10 +18,16 @@ public class Boards {
 	private String content;
 	private Integer usersId;
 	private Timestamp createdAt; // 작성 규칙 at 시분초 다 표현할 때, dt 년원일 표현할 때
-	
+
 	public Boards(String title, String content){
 		this.title=title;
 		this.content=content;
+		this.usersId=usersId;
+	}
+	public Boards(String title, String content, Integer usersId){
+		this.title=title;
+		this.content=content;
+		this.usersId=usersId;
 	}
 	public void update(UpdateDto updateDto) {
 		this.title=updateDto.getTitle();
