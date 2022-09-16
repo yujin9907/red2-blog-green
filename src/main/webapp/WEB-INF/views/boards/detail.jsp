@@ -17,12 +17,16 @@
 
 
 	<br />
-	<div>
-		<h3>제목입니다</h3>
+	디플렉스 : 안에있는 돔이 인라인블럭으로 바뀜 => 스페이스 비트윈으로 바깥쪽으로 몰기(부트스트랩)
+	https://fontawesome.com/ 사용해서 하트 아이콘 넣을 거임 : 서드퍼티라이브러리(외부에서 제공하느 라이브러리)
+	
+	<div class="d-flex justify-content-between">
+		<h3>${boards.title}</h3>
+		<div><i class="fa-regular fa-heart"></i></div>
 	</div>
 	<hr />
 
-	<div>내용입니다</div>
+	<div>${boards.content}</div>
 
 
 </div>

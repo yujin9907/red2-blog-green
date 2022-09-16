@@ -72,7 +72,6 @@ public class BoardsService {
 	}
 
 	public void 게시글쓰기(WriteDto writeDto, Users principal) {
-		Users principalUser = (Users) session.getAttribute("principal");
-		boardsDao.insert(writeDto.toEntity(principalUser.getId()));
+		boardsDao.insert(writeDto.toEntity(principal.getId()));
 	}
 }

@@ -1,7 +1,12 @@
 package site.metacoding.red.web;
 
 import java.awt.print.Printable;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -44,7 +49,19 @@ public class UsersController {
 		return "users/joinForm";
 	}
 	@GetMapping("/loginForm")
-	public String loginForm() {
+	public String loginForm(Model model, HttpServletRequest request) { // 요청헤더에 쿠키값이 있음
+		Cookie[] cookies = request.getCookies(); // 여러개 담을 수 있음. 이게 나음 / 쿠키 배열 타입인 거 메서드에 마우스 올리면 나옴
+		// request.getHeader("Cookie"); // 그 네트워크 쿠키에서 확인할 수 있는 존나 긴 쿠키값을 들고옴 ; 파싱해야됨..? 스플릿으로 세미콜론으로 쪼개고 몇번지인지 찾고 ㅅㅂ
+		
+		for(Cookie cookie:cookies) {
+			if(cookie.getName().equals("username")) {
+				model.addAttribute(cookie.getName(), cookie.getValue());
+			}
+			System.out.println("-----------------------------------");
+			System.out.println(cookie.getName());
+			System.out.println(cookie.getValue());
+		}
+		
 		return "users/loginForm";
 	}
 	
@@ -57,7 +74,21 @@ public class UsersController {
 	
 	// 메시지 뿌리면서 가는 법
 	@PostMapping("/login")
-	public @ResponseBody CMRespDto<?> login(@RequestBody LoginDto loginDto) { // 자바스크립트 사용을 위해, 뷰리졸버 발동 안 함, 데이터를 리턴하는 메서드가 됨
+	public @ResponseBody CMRespDto<?> login(@RequestBody LoginDto loginDto, HttpServletResponse response) { // 자바스크립트 사용을 위해, 뷰리졸버 발동 안 함, 데이터를 리턴하는 메서드가 됨
+		System.out.println("-------remember값 확인----------");
+		System.out.println(loginDto.isRemember());
+		
+		if(loginDto.isRemember()) {
+			//response.setHeader("Set-Cookie", "username="+loginDto.getUsername()+"; HttpOnly"); // 무슨 요청을 하든 한번 설정하면 가져감
+			Cookie cookie = new Cookie("username", loginDto.getUsername());
+			cookie.setMaxAge(60*60*24); // 날짜 하루
+			response.addCookie(cookie);
+		} else {
+			Cookie cookie = new Cookie("username", null);
+			cookie.setMaxAge(0);
+			response.addCookie(cookie);
+		}
+		
 		Users principal = usersService.로그인(loginDto);
 		System.out.println(loginDto);
 		if(principal == null) {

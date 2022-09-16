@@ -104,6 +104,7 @@ function login() {
 	let data = {
 		username: $("#username").val(),
 		password: $("#password").val(),
+		remember: $("#remember").prop("checked") // t or f
 	};
 
 	$.ajax("/login", {
@@ -121,6 +122,8 @@ function login() {
 		}
 	});
 }
+
+
 
 function resing() {
 	let id = $("#id").val();

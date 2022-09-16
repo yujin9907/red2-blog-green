@@ -32,7 +32,7 @@
 		resultType="site.metacoding.red.web.response.boards.MainDto">
 		SELECT b.id, b.title, u.username
 		FROM boards b
-		INNER JOIN
+		LEFT OUTER JOIN
 		users u
 		ON b.usersId = u.id
 		ORDER BY b.id DESC
