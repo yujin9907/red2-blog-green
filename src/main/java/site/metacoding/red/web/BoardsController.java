@@ -24,7 +24,6 @@ import site.metacoding.red.web.request.boards.WriteDto;
 import site.metacoding.red.web.response.CMRespDto;
 import site.metacoding.red.web.response.boards.PagingDto;
 import site.metacoding.red.web.response.loves.GroupByDto;
-import site.metacoding.red.web.response.loves.webDto;
 
 
 @RequiredArgsConstructor

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import site.metacoding.red.domain.loves.Loves;
 import site.metacoding.red.domain.loves.LovesDao;
 import site.metacoding.red.web.response.loves.GroupByDto;
-import site.metacoding.red.web.response.loves.webDto;
 
 @RequiredArgsConstructor
 @Service
