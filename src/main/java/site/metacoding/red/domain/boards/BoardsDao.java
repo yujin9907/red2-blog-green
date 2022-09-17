@@ -14,7 +14,7 @@ public interface BoardsDao {
 	public List<MainDto> findAll(int startNum); // 2. 조회 두가지
 	public Boards findById(Integer id);
 	public void update(Boards boards); // 3. ud
-	public void deleteById(Integer id);
+	public void delete(Integer id);
 	
 	public Boards findByUsersId(Integer usersId);
 	public void updateToUsersId(Integer id);

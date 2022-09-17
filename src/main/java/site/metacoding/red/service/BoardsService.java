@@ -68,7 +68,11 @@ public class BoardsService {
 	}
 
 	public void 게시글삭제하기(Integer id) {
-		boardsDao.deleteById(id);
+		Boards boardsPS = boardsDao.findById(id);
+		if(boardsPS==null){
+			return;
+		}
+		boardsDao.delete(id);
 	}
 
 	public void 게시글쓰기(WriteDto writeDto, Users principal) {

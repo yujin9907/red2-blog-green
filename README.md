@@ -18,30 +18,33 @@ GRANT ALL PRIVILEGES ON greendb.* TO 'green'@'%';
 
 ### 테이블 생성
 ```sql
-create table users(
-    id number primary key,
-    username varchar2(20),
-    password varchar2(20),
-    email varchar2(50),
-    createdAt TIMESTAMP
+drop table boards;
+drop table users;
+
+use ex;
+
+CREATE TABLE boards(
+                       id INT NOT NULL AUTO_INCREMENT,
+                       title VARCHAR(100),
+                       content TEXT,
+                       usersId INT,
+                       createdAt DATE,
+                       PRIMARY KEY(id)
 );
 
-CREATE SEQUENCE users_seq 
-INCREMENT BY 1 
-START WITH 1;
-
-create table boards(
-    id number primary key,
-    title varchar2(150),
-    content clob,
-    usersId number,
-    createdAt TIMESTAMP,
-    CONSTRAINT fk_users_id FOREIGN KEY(usersId) REFERENCES users(id)
+CREATE TABLE users(
+                      id INT NOT NULL AUTO_INCREMENT,
+                      username VARCHAR(100),
+                      password VARCHAR(100),
+                      email VARCHAR(500),
+                      createdAt DATE,
+                      PRIMARY KEY(id)
 );
 
-CREATE SEQUENCE boards_seq 
-INCREMENT BY 1 
-START WITH 1;
+# 회원 삭제 구현 조건 : 외래키 조건 빼고, 제약 조건 넣어서 (테이블 알터로 추가함)
+alter table boards
+    ADD CONSTRAINT boards_ibfk_1 FOREIGN KEY (usersId) REFERENCES users(id) on delete set null;
+
 ```
 
 ### 더미데이터 추가

@@ -15,15 +15,14 @@
 		<button id="btnSave" type="button" class="btn btn-primary">글쓰기완료</button>
 	</form>
 </div>
+
 <script>
-$("#btnSave").click(()=>{
-	save();
+	$("#btnSave").click(()=>{
+		save();
+	});
 
-});
-
-
-function save(){
-	let data = {
+	function save(){
+		let data = {
 			title: $("#title").val(),
 			content: $("#content").val()
 		};
@@ -41,17 +40,14 @@ function save(){
 				location.href = "/";
 			}
 		});
-}
-
+	}
 </script>
 
 <script>
-
 // 서머노트만 content 아이디로 바꿔주면 끝
 $('#content').summernote({
     height: 400
 });
-
 </script>
 <%@ include file="../layout/footer.jsp"%>
 

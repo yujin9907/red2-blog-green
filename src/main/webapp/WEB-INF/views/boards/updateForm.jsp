@@ -4,6 +4,7 @@
 
 <div class="container">
 	<form>
+		<input id="id" type="hidden" value="${boards.id}">
 		<div class="mb-3 mt-3">
 			<input id="title" type="text" class="form-control" placeholder="Enter title" value="${boards.title}">
 		</div>
@@ -15,13 +16,16 @@
 </div>
 
 <script>
-$("btnUpdateBoard").click(()=>{
-	let data = {
+	$("#btnUpdateBoard").click(()=>{
+		updateBoard();
+	});
+	function updateBoard(){
+		let data = {
 			title: $("#title").val(),
 			content: $("#content").val()
 		};
 		let id = $("#id").val();
-		
+
 		$.ajax("/boards/" + id, {
 			type: "put",
 			dataType: "json",
@@ -31,13 +35,19 @@ $("btnUpdateBoard").click(()=>{
 			}
 		}).done((res) => {
 			if (res.code == 1) {
-				location.reload(); // f5
+				location.href="/";
 			} else {
 				alert("업데이트 실패");
 			}
 		});
-});
+	}
+</script>
 
+<script>
+	// 서머노트만 content 아이디로 바꿔주면 끝
+	$('#content').summernote({
+		height: 400
+	});
 </script>
 
 <%@ include file="../layout/footer.jsp"%>
