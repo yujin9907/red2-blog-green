@@ -25,7 +25,16 @@
     <div class="d-flex justify-content-between">
         <input id="id" type="hidden" value="${boards.id}">
         <h3 id="title">${boards.title}</h3>
-        <div> 좋아요수 : 10 <i id="iconHeart" class="fa-regular fa-heart"></i></div>
+        <div> 좋아요수 : ${loves.loveCount}
+        <c:choose>
+            <c:when test="${check==true}">
+                <i id="iconHeart" class="fa-solid fa-heart"></i>
+            </c:when>
+            <c:otherwise>
+                <i id="iconHeart" class="fa-regular fa-heart"></i>
+            </c:otherwise>
+        </c:choose>
+        </div>
     </div>
     <hr/>
 
@@ -56,6 +65,7 @@
             $("#iconHeart").addClass("fa-regular");
             sendType = "DELETE";
         }
+        console.log($("#iconHeart"))
 
         $.ajax("/loves", {
            type: sendType,

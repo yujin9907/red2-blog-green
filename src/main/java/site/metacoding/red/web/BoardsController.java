@@ -15,12 +15,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.red.domain.boards.Boards;
+import site.metacoding.red.domain.loves.Loves;
 import site.metacoding.red.domain.users.Users;
 import site.metacoding.red.service.BoardsService;
+import site.metacoding.red.service.LovesService;
 import site.metacoding.red.web.request.boards.UpdateDto;
 import site.metacoding.red.web.request.boards.WriteDto;
 import site.metacoding.red.web.response.CMRespDto;
 import site.metacoding.red.web.response.boards.PagingDto;
+import site.metacoding.red.web.response.loves.GroupByDto;
+import site.metacoding.red.web.response.loves.webDto;
 
 
 @RequiredArgsConstructor
@@ -29,11 +33,7 @@ public class BoardsController {
 
 	private final HttpSession session;
 	private final BoardsService boardsService;
-	
-	/***
-	 * 
-	 *     인증과 권한 체크는 지금 하지 마세요!!
-	 */
+	private final LovesService lovesService;
 	
 	@PutMapping("/boards/{id}")
 	public @ResponseBody CMRespDto<?> update(@PathVariable Integer id, @RequestBody UpdateDto updateDto) {
@@ -71,7 +71,18 @@ public class BoardsController {
 
 	@GetMapping("/boards/{id}")
 	public String getBoardDetail(@PathVariable Integer id, Model model) {
+		Users users = (Users) session.getAttribute("principal");
+		GroupByDto loveNum = lovesService.좋아요수확인(id, users.getId());
+
+		Loves checklove = lovesService.좋아요체크(id, users.getId());
+		if(checklove==null){
+			model.addAttribute("check", false);
+		} else {
+			model.addAttribute("check", true);
+		}
 		model.addAttribute("boards", boardsService.게시글상세보기(id));
+		model.addAttribute("loves", loveNum);
+
 		return "boards/detail";
 	}
 
