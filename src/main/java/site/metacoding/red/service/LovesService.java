@@ -25,7 +25,7 @@ public class LovesService {
 
         return loveCount;
     }
-    public Loves 좋아요체크(Integer boardsId, Integer usersId){
+    public Loves 좋아요체크(int boardsId, Integer usersId){
         return lovesDao.findByPrimary(boardsId, usersId);
     }
 }

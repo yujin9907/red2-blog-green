@@ -8,7 +8,7 @@
         insert into loves(usersId, boardsId, createdAt) values (#{usersId}, #{boardsId}, now())
     </insert>
 
-    <delete id="deleteById">
+    <delete id="delete">
         delete from loves where usersId=#{usersId} and boardsId=#{boardsId}
     </delete>
 

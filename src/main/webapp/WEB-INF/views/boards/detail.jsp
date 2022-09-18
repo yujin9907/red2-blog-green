@@ -47,13 +47,14 @@
     $("#iconHeart").css("cursor","pointer").click((event) => {
         console.log(event.target);
 
-        let data = {
-            boardsId : $("#id").val()
-        };
+        // let data = {
+        //     boardsId : $("#id").val()
+        // };
 
         // let boardsId=$("#id").val(); 이렇게 해서 데이터(바디)넘기면 좆됨
         // console.log(boardsId);
 
+        let boardsId = $("#id").val();
         let sendType = "";
         let check = $("#iconHeart").hasClass("fa-regular");
         if(check==true){
@@ -65,15 +66,15 @@
             $("#iconHeart").addClass("fa-regular");
             sendType = "DELETE";
         }
-        console.log($("#iconHeart"))
+        console.log($("#iconHeart"));
 
-        $.ajax("/loves", {
+        $.ajax("/loves/"+boardsId, {
            type: sendType,
-           dataType: "json",
-           data: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            }
+           dataType: "json"
+           // data: JSON.stringify(data),
+           //  headers: {
+           //      "Content-Type": "application/json; charset=utf-8"
+           //  }
         }).done((res) => {
             if (res.code == 1) {
                 location.reload();

@@ -14,7 +14,7 @@ public class Loves {
     private Integer usersId;
     private Timestamp createdAt;
 
-    public void toEntity(Integer boardsId, Integer usersId){
+    public void toEntity(int boardsId, Integer usersId){
         this.boardsId=boardsId;
         this.usersId=usersId;
     };
