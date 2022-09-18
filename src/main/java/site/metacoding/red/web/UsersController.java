@@ -39,20 +39,17 @@ public class UsersController {
 	@GetMapping("/users/usernameSameCheck")
 	public @ResponseBody CMRespDto<Boolean> usernameSameCheck(String username) {
 		boolean isSame = usersService.아이디중복확인(username);
-		// 리턴타입은 통일해야 됨 -> DTO 리스펀스 만들기
 		return new CMRespDto<>(1, "성공", isSame);
 	}
 	
-	@GetMapping("/joinForm") // 인증과 관려된 애들은 도메인명을 붙이지 않음
-	// 나중에 인증이 필요한 애들만 users를 붙이는 등 해서 xml을 통해 인증 주소세팅을 할 수 있음
+	@GetMapping("/joinForm") // 인증과 관려된 애들은 도메인명을 붙이지 않음 => 추후 주소세팅
 	public String joinForm() {
 		return "users/joinForm";
 	}
 	@GetMapping("/loginForm")
-	public String loginForm(Model model, HttpServletRequest request) { // 요청헤더에 쿠키값이 있음
-		Cookie[] cookies = request.getCookies(); // 여러개 담을 수 있음. 이게 나음 / 쿠키 배열 타입인 거 메서드에 마우스 올리면 나옴
-		// request.getHeader("Cookie"); // 그 네트워크 쿠키에서 확인할 수 있는 존나 긴 쿠키값을 들고옴 ; 파싱해야됨..? 스플릿으로 세미콜론으로 쪼개고 몇번지인지 찾고 ㅅㅂ
-		
+	public String loginForm(Model model, HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+
 		for(Cookie cookie:cookies) {
 			if(cookie.getName().equals("username")) {
 				model.addAttribute(cookie.getName(), cookie.getValue());
@@ -67,9 +64,9 @@ public class UsersController {
 	
 	// 회원 가입 하기
 	@PostMapping("/join")
-	public @ResponseBody CMRespDto<?> join(@RequestBody JoinDto joinDto) { // json 데이터라서
+	public @ResponseBody CMRespDto<?> join(@RequestBody JoinDto joinDto) {
 		usersService.회원가입(joinDto);
-		return new CMRespDto<>(1, "회원가입성공", null); // 매핑 주소를 리다렉션 시킴 
+		return new CMRespDto<>(1, "회원가입성공", null);
 	}
 	
 	// 메시지 뿌리면서 가는 법
@@ -100,12 +97,11 @@ public class UsersController {
 	
 	@GetMapping("/users/{id}")
 	public String updateForm(@PathVariable Integer id, Model model) {
-		Users usersPS = usersService.회원정보보기(id); // db에서 가져온건 ps 붙임
+		Users usersPS = usersService.회원정보보기(id);
 		model.addAttribute("usres", usersPS);
-		return "users/updateForm"; // 이런 거 만드는 거 숙제임
+		return "users/updateForm";
 	}
 	
-	// rest api 주소 설계 규칙에 맞게. 사실 /uesrs 로 해도 되지만(세션에 아이디 값이 있기 때문에) 규칙을 지켜서 맞춰줌. users테이블에 (where)id을 수정하겠다
 	@PutMapping("/users/{id}")
 	public @ResponseBody CMRespDto<?> update(@PathVariable Integer id, @RequestBody UpdateDto updateDto) {
 		Users usersPS = usersService.회원수정(id, updateDto);

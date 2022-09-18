@@ -20,8 +20,6 @@ public class LovesController {
     @PostMapping("/loves/{boardsId}")
     public @ResponseBody
     CMRespDto<?> clickLove(@PathVariable Integer boardsId){
-        // System.out.println("보드아이디 나옴?"+insertDto.getBoardsId());
-
         Users users = (Users) session.getAttribute("principal");
         lovesService.좋아요클릭(boardsId, users.getId());
         return new CMRespDto<>(1,"성공",null);

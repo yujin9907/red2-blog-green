@@ -4,14 +4,11 @@
 <%@ include file="../layout/header.jsp"%>
 
 <div class="container">
-	<!-- 반응형 때문에 컨테이너 안에 넣어줘야 됨
-	폼컨트룰 블럭속성으로 바뀜 -->
-	<!-- !!!!!!!부모의 크기를 벗어날 수 없음 -->
 	<br/>
 	<div class="d-flex justify-content-end">
 	<div style="width:300px">
-	<form class="d-flex" method="get" action="/"> <!-- 셀렉트할 거니까 겟 -->
-        <input class="form-control me-2" type="text" placeholder="Search" name="keyword"> <!-- 폼태그니까 이걸 쿼리스트링으로 보내도 됨 직접 액션에 주소 안 걸고 하이퍼링크도 되는데 정적인 값이므로.. -->
+	<form class="d-flex" method="get" action="/">
+        <input class="form-control me-2" type="text" placeholder="Search" name="keyword">
         <button class="btn btn-primary" type="submit">Search</button>
       </form>
 	</div>

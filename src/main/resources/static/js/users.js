@@ -87,7 +87,7 @@ function checkUsername() {
 		async: true
 	}).done((res) => {
 		console.log(res);
-		if (res.code == 1) { // 통신 성공
+		if (res.code == 1) {
 			if (res.data == false) {
 				alert("아이디가 중복되지 않았습니다.");
 				isUsernameSameCheck = true;
@@ -104,7 +104,7 @@ function login() {
 	let data = {
 		username: $("#username").val(),
 		password: $("#password").val(),
-		remember: $("#remember").prop("checked") // t or f
+		remember: $("#remember").prop("checked")
 	};
 
 	$.ajax("/login", {
@@ -128,9 +128,7 @@ function login() {
 function resing() {
 	let id = $("#id").val();
 
-	$.ajax("/users/" + id, { // "/users/${users.id}" 이렇게 바로 적으면 안 됨. 파일을 따로 빼는 순간 안 먹음. jsp 파일에서만 작동하기 때문에
-		// js 나중에 빼서 쓰고 html 파일에 바인딩만 시켜서 사용함
-		// 규칙 스크립트 안에는 el 표현식을 쓰지 않음
+	$.ajax("/users/" + id, {
 		type: "DELETE",
 		dataType: "json"
 	}).done((res) => {
@@ -149,12 +147,10 @@ function update() {
 		email: $("#email").val()
 	};
 	let id = $("#id").val();
-	$.ajax("/users/" + id, { // "/users/${users.id}" 이렇게 바로 적으면 안 됨. 파일을 따로 빼는 순간 안 먹음. jsp 파일에서만 작동하기 때문에
-		// js 나중에 빼서 쓰고 html 파일에 바인딩만 시켜서 사용함
-		// 규칙 스크립트 안에는 el 표현식을 쓰지 않음
+	$.ajax("/users/" + id, {
 		type: "put",
-		dataType: "json", // 받을 거
-		data: JSON.stringify(data), // 줄 거
+		dataType: "json",
+		data: JSON.stringify(data),
 		headers: {
 			"Content-Type": "application/json; charset=utf-8"
 		}

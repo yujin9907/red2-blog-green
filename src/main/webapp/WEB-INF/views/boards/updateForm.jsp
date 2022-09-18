@@ -44,7 +44,6 @@
 </script>
 
 <script>
-	// 서머노트만 content 아이디로 바꿔주면 끝
 	$('#content').summernote({
 		height: 400
 	});

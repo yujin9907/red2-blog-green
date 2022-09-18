@@ -19,15 +19,14 @@
 
 
     <br/>
-    디플렉스 : 안에있는 돔이 인라인블럭으로 바뀜 => 스페이스 비트윈으로 바깥쪽으로 몰기(부트스트랩)
-    https://fontawesome.com/ 사용해서 하트 아이콘 넣을 거임 : 서드퍼티라이브러리(외부에서 제공하느 라이브러리)
+
 
     <div class="d-flex justify-content-between">
         <input id="id" type="hidden" value="${boards.id}">
         <h3 id="title">${boards.title}</h3>
         <div> 좋아요수 : ${loves.loveCount}
         <c:choose>
-            <c:when test="${check==true}">
+            <c:when test="${loves.islove==true}">
                 <i id="iconHeart" class="fa-solid fa-heart"></i>
             </c:when>
             <c:otherwise>
@@ -43,9 +42,9 @@
 </div>
 
 <script>
-    // $("#iconHeart").trigger('click');
+
     $("#iconHeart").css("cursor","pointer").click((event) => {
-        console.log(event.target);
+
         let boardsId = $("#id").val();
         let sendType = "";
         let check = $("#iconHeart").hasClass("fa-regular");

@@ -38,9 +38,6 @@ public class BoardsService {
 			paging.dopaging();
 			paging.setMainDto(boardsList);
 			
-			System.out.println(paging.isFirst());
-			System.out.println(paging.getStartPageNum());
-
 			return paging;
 
 		} else {

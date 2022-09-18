@@ -6,7 +6,6 @@ import site.metacoding.red.web.request.users.UpdateDto;
 
 
 
-// 보드에서 작성한 거 그대로 복사
 public interface UsersDao {
 	public void insert(Users users); 
 	public List<Users> findAll();

@@ -24,15 +24,7 @@ public class PagingDto {
 	private String keyword;
 	
 	private List<MainDto> mainDto;
-	
-//  이거 왜 만듦?
-//	public PagingDto(Integer totalCount, Integer totalPage, Integer currentPage,boolean isFirst, boolean isLast) {
-//		this.totalCount=totalCount;
-//		this.totalPage=totalPage;
-//		this.currentPage=currentPage;
-//		this.isFirst=isFirst;
-//		this.isLast=isLast;
-//	}
+
 	public void dopaging() {
 		blockPageCount = 5;
 		startPageNum = ((currentPage / blockPageCount) * blockPageCount) + 1;

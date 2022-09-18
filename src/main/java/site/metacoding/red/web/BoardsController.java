@@ -71,16 +71,10 @@ public class BoardsController {
 	@GetMapping("/boards/{id}")
 	public String getBoardDetail(@PathVariable Integer id, Model model) {
 		Users users = (Users) session.getAttribute("principal");
-		GroupByDto loveNum = lovesService.좋아요수확인(id, users.getId());
+		GroupByDto loves = lovesService.좋아요확인(id, users.getId());
 
-		Loves checklove = lovesService.좋아요체크(id, users.getId());
-		if(checklove==null){
-			model.addAttribute("check", false);
-		} else {
-			model.addAttribute("check", true);
-		}
 		model.addAttribute("boards", boardsService.게시글상세보기(id));
-		model.addAttribute("loves", loveNum);
+		model.addAttribute("loves", loves);
 
 		return "boards/detail";
 	}

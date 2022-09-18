@@ -9,6 +9,4 @@ import site.metacoding.red.domain.users.Users;
 public class UpdateDto {
 	private String password;
 	private String email;
-	
-	
 }
