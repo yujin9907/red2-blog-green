@@ -46,14 +46,6 @@
     // $("#iconHeart").trigger('click');
     $("#iconHeart").css("cursor","pointer").click((event) => {
         console.log(event.target);
-
-        // let data = {
-        //     boardsId : $("#id").val()
-        // };
-
-        // let boardsId=$("#id").val(); 이렇게 해서 데이터(바디)넘기면 좆됨
-        // console.log(boardsId);
-
         let boardsId = $("#id").val();
         let sendType = "";
         let check = $("#iconHeart").hasClass("fa-regular");
@@ -71,10 +63,6 @@
         $.ajax("/loves/"+boardsId, {
            type: sendType,
            dataType: "json"
-           // data: JSON.stringify(data),
-           //  headers: {
-           //      "Content-Type": "application/json; charset=utf-8"
-           //  }
         }).done((res) => {
             if (res.code == 1) {
                 location.reload();

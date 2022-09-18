@@ -34,3 +34,21 @@ public class LovesController {
         return new CMRespDto<>(1, "삭제성공", null);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
