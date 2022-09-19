@@ -2,6 +2,10 @@
 
 <%@ include file="../layout/header.jsp" %>
 
+<input id = "page" type="hidden" value="${sessionScope.referer.page}">
+<input id = "keyword" type="hidden" value="${sessionScope.referer.keyword}">
+
+
 <div class="container">
     <br/> <br/>
     <c:choose>
@@ -26,7 +30,7 @@
         <h3 id="title">${boards.title}</h3>
         <div> 좋아요수 : ${loves.loveCount}
         <c:choose>
-            <c:when test="${loves.islove==true}">
+            <c:when test="${check==true}">
                 <i id="iconHeart" class="fa-solid fa-heart"></i>
             </c:when>
             <c:otherwise>
@@ -78,11 +82,16 @@
         deleteBoard();
     });
     function deleteBoard(){
+
+
         let data = {
             title: $("#title").val(),
             content: $("#content").val()
         };
         let id = $("#id").val();
+
+        let page = $("#page").val();
+        let keyword = $("#keyword").val();
 
         $.ajax("/boards/" + id, {
             type: "put",
@@ -93,7 +102,8 @@
             }
         }).done((res) => {
             if (res.code == 1) {
-                location.href="/";
+                //location.href= document.referrer;
+                location.href="/?page="+page+"&keyword="+keyword;
             } else {
                 alert("업데이트 실패");
             }

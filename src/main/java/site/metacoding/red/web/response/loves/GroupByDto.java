@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class GroupByDto {
     int loveCount;
-    boolean islove;
 }

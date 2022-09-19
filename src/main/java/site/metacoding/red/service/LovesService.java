@@ -20,14 +20,23 @@ public class LovesService {
         lovesDao.delete(boardsId, usersId);
     }
 
-    public GroupByDto 좋아요확인(Integer boardsId, Integer usersId){
+    public GroupByDto 좋아요확인(Integer boardsId){
+        GroupByDto lovePS = new GroupByDto(0);
+
         GroupByDto loveCount = lovesDao.findGroupBy(boardsId);
-        Loves loves = lovesDao.findByPrimary(boardsId, usersId);
-        if(loves==null){
-            loveCount.setIslove(false);
-        } else {
-            loveCount.setIslove(true);
+        if(loveCount!=null){
+            lovePS.setLoveCount(loveCount.getLoveCount());
         }
+
         return loveCount;
+    }
+
+    public boolean 좋아요체크(Integer boardsId, Integer usersId){
+        Loves lovesPS = lovesDao.findByPrimary(boardsId, usersId);
+        if(lovesPS==null){
+            return false;
+        } else {
+            return true;
+        }
     }
 }

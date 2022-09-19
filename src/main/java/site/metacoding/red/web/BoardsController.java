@@ -25,6 +25,9 @@ import site.metacoding.red.web.response.CMRespDto;
 import site.metacoding.red.web.response.boards.PagingDto;
 import site.metacoding.red.web.response.loves.GroupByDto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @RequiredArgsConstructor
 @Controller
@@ -65,16 +68,30 @@ public class BoardsController {
 		PagingDto pagingDto = boardsService.게시글목록보기(page, keyword);
 		System.out.println(pagingDto.isFirst());
 		model.addAttribute("pagingDto", pagingDto);
+
+		// 응답하면 리퀘스트 객체는 사라짐. 세션은 안 사라짐
+
+		// dto 안만들고 넘기기
+
+		Map<String, Object> referer = new HashMap<>();
+		referer.put("page", pagingDto.getCurrentPage());
+		referer.put("keyword",pagingDto.getKeyword());
+
+		session.setAttribute("referer", referer);
+
+
 		return "boards/main";
 	}
 
 	@GetMapping("/boards/{id}")
 	public String getBoardDetail(@PathVariable Integer id, Model model) {
 		Users users = (Users) session.getAttribute("principal");
-		GroupByDto loves = lovesService.좋아요확인(id, users.getId());
+		GroupByDto loves = lovesService.좋아요확인(id);
+		boolean check = lovesService.좋아요체크(id, users.getId());
 
 		model.addAttribute("boards", boardsService.게시글상세보기(id));
 		model.addAttribute("loves", loves);
+		model.addAttribute("check", check);
 
 		return "boards/detail";
 	}
