@@ -18,12 +18,11 @@ import site.metacoding.red.domain.boards.Boards;
 import site.metacoding.red.domain.loves.Loves;
 import site.metacoding.red.domain.users.Users;
 import site.metacoding.red.service.BoardsService;
-import site.metacoding.red.service.LovesService;
 import site.metacoding.red.web.request.boards.UpdateDto;
 import site.metacoding.red.web.request.boards.WriteDto;
 import site.metacoding.red.web.response.CMRespDto;
+import site.metacoding.red.web.response.boards.DetailDto;
 import site.metacoding.red.web.response.boards.PagingDto;
-import site.metacoding.red.web.response.loves.GroupByDto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,8 +34,7 @@ public class BoardsController {
 
 	private final HttpSession session;
 	private final BoardsService boardsService;
-	private final LovesService lovesService;
-	
+
 	@PutMapping("/boards/{id}")
 	public @ResponseBody CMRespDto<?> update(@PathVariable Integer id, @RequestBody UpdateDto updateDto) {
 		boardsService.게시글수정하기(id, updateDto);
@@ -45,7 +43,9 @@ public class BoardsController {
 
 	@GetMapping("/boards/{id}/updateForm")
 	public String updateForm(@PathVariable Integer id, Model model) {
-		Boards boardsPS = boardsService.게시글상세보기(id);
+		Users principal = (Users) session.getAttribute("principal");
+
+		Boards boardsPS = boardsService.게시글수정화면데이터가져오기(id);
 		model.addAttribute("boards", boardsPS);
 		return "boards/updateForm";
 	}
@@ -85,13 +85,17 @@ public class BoardsController {
 
 	@GetMapping("/boards/{id}")
 	public String getBoardDetail(@PathVariable Integer id, Model model) {
-		Users users = (Users) session.getAttribute("principal");
-		GroupByDto loves = lovesService.좋아요확인(id);
-		boolean check = lovesService.좋아요체크(id, users.getId());
+		Users principal = (Users) session.getAttribute("principal");
+		DetailDto detailDto;
+		if(principal==null){
+			detailDto = boardsService.게시글상세보기(id, 0);
+		} else {
+			detailDto = boardsService.게시글상세보기(id, principal.getId());
+			System.out.println("-----------------");
+			System.out.println(detailDto.getLovesDto().getCount());
+		}
+		model.addAttribute("detailDto", detailDto);
 
-		model.addAttribute("boards", boardsService.게시글상세보기(id));
-		model.addAttribute("loves", loves);
-		model.addAttribute("check", check);
 
 		return "boards/detail";
 	}
@@ -103,6 +107,17 @@ public class BoardsController {
 			return "redirect:/loginForm";
 		}
 		return "boards/writeForm";
+	}
+
+	@PostMapping("/boards/{id}/loves") // 게시글 id번을 좋아요 하겠다
+	public @ResponseBody CMRespDto<?> insertLoves(@PathVariable Integer id){ // 주소규칙보다 가독성을 우선시해서
+		// boardsid는 패스로, usersid는 세션에 있으므로 바디 굳이 받아주지 않음
+		Users principal = (Users) session.getAttribute("principal");
+		Loves loves = new Loves(id, principal.getId()); // 이건 규칙, 객체를 생성해서 전달(디티오를 안 만들어도 됨)
+		boardsService.좋아요(loves); // 러브아이디의 기본키를 받아와야 삭제할 수 있기 때문에
+		return new CMRespDto<>(1, "성공", null);
+
+		// 이런 건 회사마다 스타일에 맞춰서 작성하면 됨
 	}
 }
 

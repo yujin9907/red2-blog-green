@@ -12,9 +12,14 @@
         delete from loves where usersId=#{usersId} and boardsId=#{boardsId}
     </delete>
 
-    <select id="findGroupBy" resultType="site.metacoding.red.web.response.loves.GroupByDto">
-        select count(*) loveCount from loves where boardsId=#{boardsId} group by boardsId
+    <select id="findByBoardsId" resultType="site.metacoding.red.web.response.loves.LovesDto">
+        select id lovesId, if(usersId=#{principalId}, 1, 0) checkLove,
+               (select count(*) from loves where boardsId=#{boardsId}) count
+        from loves
+        where boardsId=#{boardsId} and usersId=#{principalId};
     </select>
+
+
     
     <select id="findByPrimary" resultType="site.metacoding.red.domain.loves.Loves">
         select * from loves where boardsId=#{boardsId} and usersId=#{usersId};
