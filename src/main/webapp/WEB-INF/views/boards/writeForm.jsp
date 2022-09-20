@@ -16,32 +16,7 @@
 	</form>
 </div>
 
-<script>
-	$("#btnSave").click(()=>{
-		save();
-	});
-
-	function save(){
-		let data = {
-			title: $("#title").val(),
-			content: $("#content").val()
-		};
-
-		$.ajax("/boards", {
-			type: "POST",
-			dataType: "json",
-			data: JSON.stringify(data),
-			headers: {
-				"Content-Type": "application/json"
-			}
-		}).done((res) => {
-			if (res.code == 1) {
-				//console.log(res);
-				location.href = "/";
-			}
-		});
-	}
-</script>
+<script src="/js/boards.js"></script>
 
 <script>
 // 서머노트만 content 아이디로 바꿔주면 끝

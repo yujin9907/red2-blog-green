@@ -23,18 +23,9 @@
 		INNER JOIN
 		users u
 		ON b.usersId = u.id
-		WHERE title like '%'||#{keyword}||'%'
-		ORDER BY b.id DESC
-		limit 3 offset  #{startNum}
-	</select>
-
-	<select id="findAll"
-		resultType="site.metacoding.red.web.response.boards.MainDto">
-		SELECT b.id, b.title, u.username
-		FROM boards b
-		LEFT OUTER JOIN
-		users u
-		ON b.usersId = u.id
+		<if test="keyword!=null">
+		WHERE title like CONCAT('%',#{keyword},'%')
+		</if>
 		ORDER BY b.id DESC
 		limit 3 offset #{startNum}
 	</select>
@@ -52,7 +43,7 @@
 		isFirst, 0 isLast
 		FROM boards
 		<if test="keyword!=null">
-		WHERE title like '%'||#{keyword}||'%'
+		WHERE title like CONCAT('%',#{keyword},'%')
 		</if>
 		) b
 	</select>

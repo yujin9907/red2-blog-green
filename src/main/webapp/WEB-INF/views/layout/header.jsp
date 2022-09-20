@@ -18,7 +18,6 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <!-- 폰트 어썸 -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
-<link href="/resources/static/css/style.css" rel="stylesheet">
 
 </head>
 <body>
@@ -39,9 +38,9 @@
 						</c:when>
 						<c:otherwise>
 							<li class="nav-item"><a class="nav-link"
-								href="/users/${principal.id}">회원수정</a></li>
+								href="/s/users/${principal.id}">회원수정</a></li>
 							<li class="nav-item"><a class="nav-link"
-								href="/boards/writeForm">글쓰기</a></li>
+								href="/s/boards/writeForm">글쓰기</a></li>
 							<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
 						</c:otherwise>
 					</c:choose>

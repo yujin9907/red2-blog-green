@@ -35,13 +35,14 @@ public class BoardsController {
 	private final HttpSession session;
 	private final BoardsService boardsService;
 
-	@PutMapping("/boards/{id}")
+	// 인증필요
+	@PutMapping("/s/api/boards/{id}")
 	public @ResponseBody CMRespDto<?> update(@PathVariable Integer id, @RequestBody UpdateDto updateDto) {
 		boardsService.게시글수정하기(id, updateDto);
 		return new CMRespDto<>(1, "수정완료", null);
 	}
-
-	@GetMapping("/boards/{id}/updateForm")
+	// 인증필요
+	@GetMapping("/s/boards/{id}/updateForm")
 	public String updateForm(@PathVariable Integer id, Model model) {
 		Users principal = (Users) session.getAttribute("principal");
 
@@ -49,14 +50,14 @@ public class BoardsController {
 		model.addAttribute("boards", boardsPS);
 		return "boards/updateForm";
 	}
-
-	@DeleteMapping("/boards/{id}")
+	// 인증필요
+	@DeleteMapping("/s/api/boards/{id}")
 	public @ResponseBody CMRespDto<?> deleteBoards(@PathVariable Integer id) {
 		boardsService.게시글삭제하기(id);
 		return new CMRespDto<>(1, "삭제성공", null);
 	}
-
-	@PostMapping("/boards")
+	// 인증필요
+	@PostMapping("/s/api/boards")
 	public @ResponseBody CMRespDto<?> writeBoards(@RequestBody WriteDto writeDto) {
 		Users principal = (Users) session.getAttribute("principal");
 		boardsService.게시글쓰기(writeDto, principal);
@@ -66,7 +67,6 @@ public class BoardsController {
 	@GetMapping({ "/", "/boards" })
 	public String getBoardList(Model model, @Param(value="page") Integer page, @Param(value="keyword") String keyword) { // 0 -> 0, 1->10, 2->20
 		PagingDto pagingDto = boardsService.게시글목록보기(page, keyword);
-		System.out.println(pagingDto.isFirst());
 		model.addAttribute("pagingDto", pagingDto);
 
 		// 응답하면 리퀘스트 객체는 사라짐. 세션은 안 사라짐
@@ -75,7 +75,7 @@ public class BoardsController {
 
 		Map<String, Object> referer = new HashMap<>();
 		referer.put("page", pagingDto.getCurrentPage());
-		referer.put("keyword",pagingDto.getKeyword());
+		referer.put("keyword", pagingDto.getKeyword());
 
 		session.setAttribute("referer", referer);
 
@@ -88,42 +88,37 @@ public class BoardsController {
 		Users principal = (Users) session.getAttribute("principal");
 		DetailDto detailDto;
 		if(principal==null){
-			detailDto = boardsService.게시글상세보기(id, 0);
+			detailDto = boardsService.게시글상세보기(id, null);
 		} else {
 			detailDto = boardsService.게시글상세보기(id, principal.getId());
-			System.out.println("-----------------");
-			System.out.println(detailDto.getLovesDto().getCount());
 		}
 		model.addAttribute("detailDto", detailDto);
-
-
 		return "boards/detail";
 	}
-
-	@GetMapping("/boards/writeForm")
+	// 인증필요
+	@GetMapping("/s/boards/writeForm")
 	public String writeForm() {
-		Users principal = (Users) session.getAttribute("principal");
-		if (principal == null) {
-			return "redirect:/loginForm";
-		}
+//		Users principal = (Users) session.getAttribute("principal");
+//		if (principal == null) {
+//			return "redirect:/loginForm";
+//		}
 		return "boards/writeForm";
 	}
-
-	@PostMapping("/boards/{id}/loves") // 게시글 id번을 좋아요 하겠다
+	// 인증필요
+	@PostMapping("/s/api/boards/{id}/loves") // 게시글 id번을 좋아요 하겠다
 	public @ResponseBody CMRespDto<?> insertLoves(@PathVariable Integer id){ // 주소규칙보다 가독성을 우선시해서
 		// boardsid는 패스로, usersid는 세션에 있으므로 바디 굳이 받아주지 않음
 		Users principal = (Users) session.getAttribute("principal");
 		Loves loves = new Loves(id, principal.getId()); // 이건 규칙, 객체를 생성해서 전달(디티오를 안 만들어도 됨)
 		boardsService.좋아요(loves); // 러브아이디의 기본키를 받아와야 삭제할 수 있기 때문에
-		return new CMRespDto<>(1, "성공", null);
+		return new CMRespDto<>(1, "성공", loves);
 
 		// 이런 건 회사마다 스타일에 맞춰서 작성하면 됨
 	}
-	@DeleteMapping("/boards/{id}/loves")
-	public @ResponseBody CMRespDto<?> deleteLove(@PathVariable Integer id){
-		Users principal = (Users) session.getAttribute("principal");
-		Loves loves = new Loves(id, principal.getId());
-		boardsService.좋아요취소(loves);
+	// 인증 필요
+	@DeleteMapping("/s/api/boards/{id}/loves/{lovesId}")
+	public @ResponseBody CMRespDto<?> deleteLove(@PathVariable Integer id, @PathVariable Integer lovesId){
+		boardsService.좋아요취소(lovesId);
 		return new CMRespDto<>(1, "성공", null);
 	}
 }

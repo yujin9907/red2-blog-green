@@ -128,7 +128,7 @@ function login() {
 function resing() {
 	let id = $("#id").val();
 
-	$.ajax("/users/" + id, {
+	$.ajax("/s/api/users/" + id, {
 		type: "DELETE",
 		dataType: "json"
 	}).done((res) => {
@@ -147,7 +147,7 @@ function update() {
 		email: $("#email").val()
 	};
 	let id = $("#id").val();
-	$.ajax("/users/" + id, {
+	$.ajax("/s/api/users/" + id, {
 		type: "put",
 		dataType: "json",
 		data: JSON.stringify(data),

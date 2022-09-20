@@ -54,9 +54,6 @@ public class UsersController {
 			if(cookie.getName().equals("username")) {
 				model.addAttribute(cookie.getName(), cookie.getValue());
 			}
-			System.out.println("-----------------------------------");
-			System.out.println(cookie.getName());
-			System.out.println(cookie.getValue());
 		}
 		
 		return "users/loginForm";
@@ -72,9 +69,7 @@ public class UsersController {
 	// 메시지 뿌리면서 가는 법
 	@PostMapping("/login")
 	public @ResponseBody CMRespDto<?> login(@RequestBody LoginDto loginDto, HttpServletResponse response) { // 자바스크립트 사용을 위해, 뷰리졸버 발동 안 함, 데이터를 리턴하는 메서드가 됨
-		System.out.println("-------remember값 확인----------");
-		System.out.println(loginDto.isRemember());
-		
+
 		if(loginDto.isRemember()) {
 			//response.setHeader("Set-Cookie", "username="+loginDto.getUsername()+"; HttpOnly"); // 무슨 요청을 하든 한번 설정하면 가져감
 			Cookie cookie = new Cookie("username", loginDto.getUsername());
@@ -87,29 +82,29 @@ public class UsersController {
 		}
 		
 		Users principal = usersService.로그인(loginDto);
-		System.out.println(loginDto);
 		if(principal == null) {
 			return new CMRespDto<>(-1, "로그인실패", null);
 		} // 안 된 경우를 처리하고 정상 경우는 밑에 두는 게 코드가 깔끔함
 		session.setAttribute("principal", principal);
 		return new CMRespDto<>(1, "성공", null); 
 	}
-	
-	@GetMapping("/users/{id}")
+
+	// 인증필요
+	@GetMapping("/s/users/{id}")
 	public String updateForm(@PathVariable Integer id, Model model) {
 		Users usersPS = usersService.회원정보보기(id);
 		model.addAttribute("usres", usersPS);
-		return "users/updateForm";
+		return "/users/updateForm";
 	}
-	
-	@PutMapping("/users/{id}")
+	// 인증필요
+	@PutMapping("/s/api/users/{id}")
 	public @ResponseBody CMRespDto<?> update(@PathVariable Integer id, @RequestBody UpdateDto updateDto) {
 		Users usersPS = usersService.회원수정(id, updateDto);
 		session.setAttribute("users", usersPS);
 		return new CMRespDto<>(1, "회원 수정 성공", null);
 	}
-	
-	@DeleteMapping("/users/{id}")
+	// 인증필요
+	@DeleteMapping("/s/api/users/{id}")
 	public @ResponseBody CMRespDto<?> delete(@PathVariable Integer id) {
 		usersService.회원탈퇴(id);
 		session.invalidate();

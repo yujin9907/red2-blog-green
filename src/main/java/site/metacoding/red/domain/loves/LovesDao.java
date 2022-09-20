@@ -1,14 +1,12 @@
 package site.metacoding.red.domain.loves;
 
-
-import ch.qos.logback.core.util.InvocationGate;
-import site.metacoding.red.web.response.loves.LovesDto;
+import site.metacoding.red.web.response.boards.DetailDto;
 
 public interface LovesDao {
     public void insert(Loves loves);
-    public void delete(Loves loves);
+    public void delete(Integer lovesId);
     //public GroupByDto findGroupBy(Integer boardsId);
-    public Loves findByPrimary(Integer boardsId, Integer usersId);
+    // public Loves findByPrimary(Integer boardsId, Integer usersId);
 
-    public LovesDto findByBoardsId(Integer principalId, Integer boardsId);
+    public DetailDto findByDetail(Integer principalId, Integer boardsId);
 }

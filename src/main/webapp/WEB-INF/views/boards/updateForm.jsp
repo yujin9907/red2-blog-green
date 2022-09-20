@@ -15,33 +15,8 @@
 	</form>
 </div>
 
-<script>
-	$("#btnUpdateBoard").click(()=>{
-		updateBoard();
-	});
-	function updateBoard(){
-		let data = {
-			title: $("#title").val(),
-			content: $("#content").val()
-		};
-		let id = $("#id").val();
+<script src="/js/boards.js"></script>
 
-		$.ajax("/boards/" + id, {
-			type: "put",
-			dataType: "json",
-			data: JSON.stringify(data),
-			headers: {
-				"Content-Type": "application/json; charset=utf-8"
-			}
-		}).done((res) => {
-			if (res.code == 1) {
-				location.href="/";
-			} else {
-				alert("업데이트 실패");
-			}
-		});
-	}
-</script>
 
 <script>
 	$('#content').summernote({

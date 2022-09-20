@@ -18,7 +18,6 @@ import site.metacoding.red.web.request.boards.UpdateDto;
 import site.metacoding.red.web.response.boards.DetailDto;
 import site.metacoding.red.web.response.boards.PagingDto;
 import site.metacoding.red.web.response.boards.MainDto;
-import site.metacoding.red.web.response.loves.LovesDto;
 
 @RequiredArgsConstructor
 @Service
@@ -28,11 +27,12 @@ public class BoardsService {
 	private final HttpSession session;
 	private final LovesDao lovesDao;
 
-	public void 좋아요취소(Loves loves){
-		lovesDao.delete(loves);
+	public void 좋아요취소(Integer lovesId){
+		lovesDao.delete(lovesId);
 	}
-	public void 좋아요(Loves loves){
+	public Loves 좋아요(Loves loves){
 		lovesDao.insert(loves);
+		return loves;
 	}
 
 	public PagingDto 게시글목록보기(Integer page, String keyword) {
@@ -42,42 +42,22 @@ public class BoardsService {
 		}
 		int startNum = page * 3;
 
-		if (keyword == null || keyword.isEmpty()) {
+		List<MainDto> boardsList = boardsDao.findSearch(startNum, keyword);
+		PagingDto paging = boardsDao.paging(startNum, keyword);
 
-			List<MainDto> boardsList = boardsDao.findAll(startNum);
-			PagingDto paging = boardsDao.paging(page, null);
-
-			paging.dopaging();
-			paging.setMainDto(boardsList);
-			
-			return paging;
-
-		} else {
-
-			List<MainDto> boardsList = boardsDao.findSearch(startNum, keyword);
-			PagingDto paging = boardsDao.paging(page, keyword);
-
-			paging.dopaging();
-			paging.setMainDto(boardsList);
-
-			return paging;
-		}
-
+		paging.setKeyword(keyword);
+		paging.dopaging();
+		paging.setMainDto(boardsList);
+		return paging;
 	}
 
 	public Boards 게시글수정화면데이터가져오기(Integer id){
 		return boardsDao.findById(id);
 	}
 
-	public DetailDto 게시글상세보기(Integer id, Integer principalId) {
-		Boards boardsPS = boardsDao.findById(id);
-		LovesDto lovesDto = lovesDao.findByBoardsId(principalId, id);
-		if(lovesDto == null) {
-			lovesDto = new LovesDto();
-			lovesDto.setCount(0);
-			lovesDto.setCheckLove(false);
-		}
-		return new DetailDto(boardsPS, lovesDto);
+	public DetailDto 게시글상세보기(Integer boardsId, Integer principalId) {
+		DetailDto detailDto = lovesDao.findByDetail(principalId, boardsId);
+		return detailDto;
 	}
 
 	public void 게시글수정하기(Integer id, UpdateDto updateDto) {
