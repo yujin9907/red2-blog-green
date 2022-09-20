@@ -119,6 +119,13 @@ public class BoardsController {
 
 		// 이런 건 회사마다 스타일에 맞춰서 작성하면 됨
 	}
+	@DeleteMapping("/boards/{id}/loves")
+	public @ResponseBody CMRespDto<?> deleteLove(@PathVariable Integer id){
+		Users principal = (Users) session.getAttribute("principal");
+		Loves loves = new Loves(id, principal.getId());
+		boardsService.좋아요취소(loves);
+		return new CMRespDto<>(1, "성공", null);
+	}
 }
 
 

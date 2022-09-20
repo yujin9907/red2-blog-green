@@ -28,7 +28,8 @@ public class BoardsService {
 	private final HttpSession session;
 	private final LovesDao lovesDao;
 
-	public void 좋아요취소(Integer id){
+	public void 좋아요취소(Loves loves){
+		lovesDao.delete(loves);
 	}
 	public void 좋아요(Loves loves){
 		lovesDao.insert(loves);

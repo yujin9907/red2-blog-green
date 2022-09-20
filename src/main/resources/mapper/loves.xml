@@ -13,10 +13,9 @@
     </delete>
 
     <select id="findByBoardsId" resultType="site.metacoding.red.web.response.loves.LovesDto">
-        select id lovesId, if(usersId=#{principalId}, 1, 0) checkLove,
-               (select count(*) from loves where boardsId=#{boardsId}) count
+        select count(*) count, (select count(*) from loves where usersId=#{principalId} and boardsId=#{boardsId}) checkLove
         from loves
-        where boardsId=#{boardsId} and usersId=#{principalId};
+        where boardsId=#{boardsId};
     </select>
 
 

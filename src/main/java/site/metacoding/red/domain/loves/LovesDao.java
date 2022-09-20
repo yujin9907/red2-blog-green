@@ -6,7 +6,7 @@ import site.metacoding.red.web.response.loves.LovesDto;
 
 public interface LovesDao {
     public void insert(Loves loves);
-    public void delete(Integer boardsId, Integer usersId);
+    public void delete(Loves loves);
     //public GroupByDto findGroupBy(Integer boardsId);
     public Loves findByPrimary(Integer boardsId, Integer usersId);
 

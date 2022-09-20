@@ -68,7 +68,7 @@
                 // $("#div의 id").load(window.location.href + "#div의 id");
                 // let count = $("#countLove").text();
 
-                // $("#lovecount").load(location.href + ' #lovecount');
+                $("#lovecount").load(location.href + ' #lovecount');
 
             } else {
                 alert("실패");
@@ -77,14 +77,29 @@
     }
 
     function deleteLove(){
+        let id = $("#id").val();
 
+        $.ajax("/boards/"+id+"/loves", {
+            type: "delete",
+            dataType: "json",
+        }).done((res) => {
+            if (res.code == 1) {
+
+                renderCancelLoves();
+                $("#lovecount").load(location.href + ' #lovecount');
+
+
+            } else {
+                alert("실패");
+            }
+        });
     }
 
-    function renderLove(isLovedState){
+    function renderLove(){
         $("#iconHeart").removeClass("fa-regular");
         $("#iconHeart").addClass("fa-solid");
     }
-    function renderCancelLoves(isLovedState){
+    function renderCancelLoves(){
         $("#iconHeart").removeClass("fa-solid");
         $("#iconHeart").addClass("fa-regular");
     }
