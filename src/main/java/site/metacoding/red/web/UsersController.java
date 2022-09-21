@@ -3,14 +3,20 @@ package site.metacoding.red.web;
 import java.awt.print.Printable;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.red.domain.users.Users;
+import site.metacoding.red.handler.ex.MyApiException;
 import site.metacoding.red.service.UsersService;
 import site.metacoding.red.util.Script;
 import site.metacoding.red.web.request.users.JoinDto;
@@ -60,8 +67,30 @@ public class UsersController {
 	}
 	
 	// 회원 가입 하기
-	@PostMapping("/join")
-	public @ResponseBody CMRespDto<?> join(@RequestBody JoinDto joinDto) {
+	@PostMapping("/api/join")
+	public @ResponseBody CMRespDto<?> join(@RequestBody @Valid JoinDto joinDto, Model model, BindingResult bindingResult) { // 모델 바인딩 순서 이거 그대로 중요. 무조건 모델 바로 뒤에 있어야 됨
+		// 유효성 검사
+//		if(joinDto.getUsername().length()>20) {
+//			throw new MyApiException("아이디가 너무 길어");
+//		} joinDto에서 검증할 거임 라이브러리 가지고
+		
+		if(bindingResult.hasErrors()){
+			System.out.println("에러가 있습니다");
+			// 무슨 에러가 있는지 확인
+//			List<FieldError> feList = bindingResult.getFieldErrors();
+////			Map<String, String> map = new HashMap<>();
+////			for(FieldError fe : feList){
+////				System.out.println(fe.getDefaultMessage());
+////				map.put(fe.getField(), fe.getDefaultMessage());
+////			}
+////			throw new MyApiException(map.toString());
+			FieldError fe = bindingResult.getFieldError();
+			throw new MyApiException(fe.getDefaultMessage());
+		} else {
+			System.out.println("에러가 있습니다");
+		}
+
+
 		usersService.회원가입(joinDto);
 		return new CMRespDto<>(1, "회원가입성공", null);
 	}

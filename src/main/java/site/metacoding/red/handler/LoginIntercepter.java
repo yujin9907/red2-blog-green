@@ -29,8 +29,8 @@ public class LoginIntercepter implements HandlerInterceptor{
             } else {
                 response.sendRedirect("/loginForm");
             }
-
+            return false;
         }
-        return false;
+        return true;
     }
 }

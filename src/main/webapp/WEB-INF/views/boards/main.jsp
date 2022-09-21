@@ -34,15 +34,18 @@
 		</tbody>
 	</table>
 
+	<h1>${pagingDto.currentPage}</h1>
+	<h1>${pagingDto.startPageNum}</h1>
+
 	<div class="d-flex justify-content-center">
 	<ul class="pagination">
-		<li class='page-item'><a class="page-link"
-			href="/?keyword=${pagingDto.keyword}&page=${pagingDto.currentPage -1}">previous</a></li>
+		<li class='page-item ${pagingDto.first ? "disabled" : ""}'>
+			<a class="page-link" href="/?keyword=${pagingDto.keyword}&page=${pagingDto.currentPage -1}">previous</a></li>
 			 <c:forEach var="num" begin="${pagingDto.startPageNum}" end="${pagingDto.lastPageNum}" step="1">
-            <a class="page-link" href='?page=${num-1}&keyword=${pagingDto.keyword}'>${num}</a>
+            <a class="page-link" href='?keyword=${pagingDto.keyword}&page=${num-1}'>${num}</a>
          </c:forEach>
-			<li class='page-ite'><a class="page-link"
-			href="/?keyword=${pagingDto.keyword}&page=${pagingDto.currentPage+1}">Next</a></li>
+			<li class='page-ite'>
+				<a class='page-link ${pagingDto.last ? "disabled" : ""}' href="/?keyword=${pagingDto.keyword}&page=${pagingDto.currentPage+1}">Next</a></li>
 	</ul>
 	</div>
 

@@ -44,8 +44,7 @@ public class BoardsController {
 	// 인증필요
 	@GetMapping("/s/boards/{id}/updateForm")
 	public String updateForm(@PathVariable Integer id, Model model) {
-		Users principal = (Users) session.getAttribute("principal");
-
+		// 여기서 오류 확인할 수 없음 db에서 select해 봐야 아이디가 잘못된지 확인할 수 있음
 		Boards boardsPS = boardsService.게시글수정화면데이터가져오기(id);
 		model.addAttribute("boards", boardsPS);
 		return "boards/updateForm";
@@ -98,10 +97,10 @@ public class BoardsController {
 	// 인증필요
 	@GetMapping("/s/boards/writeForm")
 	public String writeForm() {
-//		Users principal = (Users) session.getAttribute("principal");
-//		if (principal == null) {
-//			return "redirect:/loginForm";
-//		}
+		Users principal = (Users) session.getAttribute("principal");
+		if (principal == null) {
+			return "redirect:/loginForm";
+		}
 		return "boards/writeForm";
 	}
 	// 인증필요

@@ -31,11 +31,13 @@ public class UsersService {
 			return null;
 		}
 		
-		if(usersPS.getPassword()==loginDto.getPassword()) {
+		if(usersPS.getPassword().equals(loginDto.getPassword())) {
 			session.setAttribute("principal", usersPS);
+			return usersPS;
+		} else {
+			return null;
 		}
-		return usersPS; 
-	} 
+	}
 	public Users 회원수정(Integer id, UpdateDto updateDto) {
 		//1. 영속화
 		Users usersPS = usersDao.findById(id);

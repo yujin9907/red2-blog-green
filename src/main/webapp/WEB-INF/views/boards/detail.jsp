@@ -10,16 +10,12 @@
 
 <div class="container">
     <br/> <br/>
-    <c:choose>
-        <c:when test="${principal.id==detail.userId}">
+    <c:if test="${detailDto.usersId == sessionScope.principal.id}">
             <div class="d-flex">
                 <a href="/s/boards/${detailDto.id}/updateForm" class="btn btn-warning">수정하러가기</a>
                 <button id="btnDelete" class="btn btn-danger">삭제</button>
             </div>
-        </c:when>
-        <c:otherwise>
-        </c:otherwise>
-    </c:choose>
+    </c:if>
 
 
     <br/>

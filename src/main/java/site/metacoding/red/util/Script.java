@@ -6,28 +6,28 @@ public class Script {
 	// new 안 하고 호출할 수 있도록
 	public static String back(String msg) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<scripts>");
+		sb.append("<script>");
 		sb.append("alert('"+msg+"');");
 		sb.append("history.back();");
-		sb.append("</scripts>");
+		sb.append("</script>");
 		return sb.toString();
 	}
 	public static String href(String url) {
 
 		StringBuilder sb = new StringBuilder();
-		sb.append("<scripts>");
+		sb.append("<script>");
 		sb.append("location.href='"+url+"';");
-		sb.append("</scripts>");
+		sb.append("</script>");
 		return sb.toString();
 		
 	}
 	public static String href(String url, String msg) {
 
 		StringBuilder sb = new StringBuilder();
-		sb.append("<scripts>");
+		sb.append("<script>");
 		sb.append("alert('"+msg+"');");
 		sb.append("location.href='"+url+"';");
-		sb.append("</scripts>");
+		sb.append("</script>");
 		return sb.toString();
 	}
 }
